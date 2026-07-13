@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>De Verbouw Offerte Check — Weet wat je tekent</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800;900&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F7F6F2;
+    --paper-alt:#F0EEE7;
+    --paper-deep:#E3E0D6;
+    --ink:#1E2226;
+    --ink-soft:#565B60;
+    --ink-faint:#8B9096;
+    --red-flag:#B0713A;
+    --red-flag-deep:#8A5726;
+    --blueprint:#1E4A3A;
+    --blueprint-deep:#112E23;
+    --metallic:linear-gradient(135deg, #3C7660 0%, #1E4A3A 45%, #0F2B21 100%);
+    --tape:#C99A3D;
+    --check:#3D7A54;
+    --line:#DFDCD2;
+    --white-paper:#FFFFFF;
+    --radius:10px;
+    --font-display:'Archivo', sans-serif;
+    --font-body:'Inter', sans-serif;
+    --font-mono:'IBM Plex Mono', monospace;
+  }
+
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--font-body);
+    line-height:1.6;
+  }
+
+  img,svg{display:block; max-width:100%;}
+  a{color:inherit;}
+
+  .wrap{
+    max-width:1140px;
+    margin:0 auto;
+    padding:0 32px;
+  }
+
+  ::selection{ background:var(--tape); color:var(--ink); }
+
+  :focus-visible{
+    outline:3px solid var(--blueprint);
+    outline-offset:3px;
+  }
+
+  /* ---------- Typography helpers ---------- */
+  .eyebrow{
+    font-family:var(--font-mono);
+    font-size:12.5px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--red-flag-deep);
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+  }
+  .eyebrow::before{
+    content:"";
+    width:8px; height:8px;
+    background:var(--red-flag);
+    border-radius:50%;
+    display:inline-block;
+  }
+  h1,h2,h3{
+    font-family:var(--font-display);
+    color:var(--ink);
+    letter-spacing:-0.01em;
+    line-height:1.06;
+  }
+  h1{ font-weight:800; font-size:clamp(2.3rem, 4.6vw, 3.7rem); }
+  h2{ font-weight:700; font-size:clamp(1.65rem, 3vw, 2.3rem); }
+  h3{ font-weight:700; font-size:1.15rem; }
+  .lede{
+    font-size:1.15rem;
+    color:var(--ink-soft);
+    max-width:46ch;
+  }
+  .stamp-label{
+    font-family:var(--font-mono);
+    font-size:11.5px;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    color:var(--ink-faint);
+  }
+
+  /* ---------- Buttons ---------- */
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    font-family:var(--font-body);
+    font-weight:600;
+    font-size:0.96rem;
+    padding:14px 26px;
+    border-radius:var(--radius);
+    border:1.5px solid transparent;
+    cursor:pointer;
+    text-decoration:none;
+    transition:transform .15s ease, box-shadow .15s ease, background .15s ease, color .15s ease, border-color .15s ease;
+  }
+  .btn-primary{
+    background:var(--metallic);
+    border-color:var(--blueprint-deep);
+    color:var(--white-paper);
+    box-shadow:0 1px 2px rgba(15,30,25,.2), inset 0 1px 0 rgba(255,255,255,.12);
+  }
+  .btn-primary:hover{ filter:brightness(1.08); box-shadow:0 8px 20px -6px rgba(20,50,40,.5), inset 0 1px 0 rgba(255,255,255,.15); transform:translateY(-1px); }
+  .btn-ghost{
+    background:var(--white-paper);
+    color:var(--ink);
+    border-color:var(--line);
+  }
+  .btn-ghost:hover{ border-color:var(--ink-faint); box-shadow:0 4px 12px -4px rgba(30,34,38,.12); transform:translateY(-1px); }
+
+  /* ---------- Nav ---------- */
+  header{
+    position:sticky; top:0; z-index:50;
+    background:rgba(239,235,226,0.92);
+    backdrop-filter:blur(6px);
+    border-bottom:1px solid var(--line);
+  }
+  nav{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:18px 32px;
+    max-width:1140px; margin:0 auto;
+  }
+  .logo{
+    font-family:var(--font-mono);
+    font-weight:600;
+    font-size:15px;
+    letter-spacing:.02em;
+    display:flex; align-items:center; gap:10px;
+  }
+  .logo .mark{
+    width:26px; height:26px;
+    background:var(--metallic);
+    color:#fff;
+    display:flex; align-items:center; justify-content:center;
+    font-family:var(--font-mono); font-size:13px; font-weight:600;
+    border-radius:7px;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.18);
+  }
+  .nav-links{
+    display:flex; gap:30px; list-style:none;
+    font-size:0.92rem; font-weight:500;
+  }
+  .nav-links a{ text-decoration:none; color:var(--ink-soft); transition:color .15s;}
+  .nav-links a:hover{ color:var(--red-flag-deep); }
+  .nav-cta{ display:flex; }
+  .nav-toggle{ display:none; background:none; border:none; cursor:pointer; }
+
+  @media (max-width:820px){
+    .nav-links{ display:none; }
+    .nav-toggle{ display:block; }
+  }
+
+  /* ---------- Hero ---------- */
+  .hero{
+    padding:76px 0 90px;
+    position:relative;
+    overflow:hidden;
+  }
+  .hero-grid{
+    display:grid;
+    grid-template-columns:1.05fr 0.95fr;
+    gap:56px;
+    align-items:center;
+  }
+  .hero h1{ margin:18px 0 20px; }
+  .hero-actions{ display:flex; gap:14px; margin-top:32px; flex-wrap:wrap; }
+
+  .hero-intro{
+    margin-top:34px;
+    padding-top:26px;
+    border-top:1px solid var(--line);
+    color:var(--ink-soft);
+    font-size:0.98rem;
+    max-width:52ch;
+  }
+
+  /* ---------- Document mockup (signature element) ---------- */
+  .doc-stage{
+    position:relative;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    min-height:420px;
+  }
+  .doc{
+    width:100%;
+    max-width:380px;
+    background:var(--white-paper);
+    border:1px solid var(--line);
+    border-radius:14px;
+    box-shadow:0 30px 60px -24px rgba(20,30,40,.22), 0 2px 8px rgba(20,30,40,.05);
+    padding:30px 28px 28px;
+    position:relative;
+  }
+  .doc-head{
+    display:flex; align-items:center; justify-content:space-between;
+    margin-bottom:20px; padding-bottom:16px;
+    border-bottom:1px solid var(--line);
+  }
+  .doc-head .doc-title{
+    font-family:var(--font-mono);
+    font-size:11px;
+    letter-spacing:.08em;
+    color:var(--ink-faint);
+    text-transform:uppercase;
+  }
+  .doc-head .doc-badge{
+    display:inline-flex; align-items:center; gap:6px;
+    background:rgba(61,122,84,0.1);
+    color:var(--check);
+    font-family:var(--font-mono);
+    font-size:10.5px; font-weight:600;
+    letter-spacing:.05em;
+    padding:5px 10px;
+    border-radius:20px;
+  }
+  .doc-head .doc-badge::before{ content:"✓"; font-weight:700; }
+  .doc-row{
+    display:flex; justify-content:space-between; align-items:center; gap:12px;
+    font-size:13.5px; color:var(--ink-soft);
+    padding:10px 0;
+    border-bottom:1px solid var(--paper-alt);
+  }
+  .doc-row:last-of-type{ border-bottom:none; }
+  .doc-row.flagged{ color:var(--red-flag-deep); }
+  .doc-row.flagged .amt{
+    font-family:var(--font-mono);
+    font-size:10.5px;
+    background:rgba(174,58,44,0.09);
+    padding:3px 8px;
+    border-radius:20px;
+  }
+  .doc-row .amt{ color:var(--ink); font-family:var(--font-mono); font-size:13px; }
+  .doc-total{
+    margin-top:14px; padding-top:16px;
+    border-top:1.5px solid var(--ink);
+    display:flex; justify-content:space-between;
+    font-weight:600; font-size:14.5px;
+  }
+  .doc-total .amt{ font-family:var(--font-mono); }
+
+  @media (max-width:900px){
+    .hero-grid{ grid-template-columns:1fr; }
+    .doc-stage{ min-height:auto; margin-top:20px; }
+  }
+
+  /* ---------- Section shells ---------- */
+  section{ padding:84px 0; }
+  .section-alt{ background:var(--paper-alt); border-top:1px solid var(--line); border-bottom:1px solid var(--line); }
+  .section-head{ max-width:640px; margin-bottom:48px; }
+  .section-head .eyebrow{ margin-bottom:14px; }
+
+  /* ---------- Probleem ---------- */
+  .problem-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:40px;
+    align-items:center;
+  }
+  .checklist{ list-style:none; display:flex; flex-direction:column; gap:12px; }
+  .checklist li{
+    display:flex; align-items:baseline; gap:12px;
+    font-family:var(--font-mono);
+    font-size:14px;
+    color:var(--ink-soft);
+    padding:12px 16px;
+    background:var(--white-paper);
+    border:1px solid var(--line);
+    border-left:3px solid var(--red-flag);
+    border-radius:8px;
+  }
+  .checklist li .x{ color:var(--red-flag); font-weight:600; }
+
+  @media (max-width:820px){ .problem-grid{ grid-template-columns:1fr; } }
+
+  /* ---------- Hoe werkt het (tape-measure steps) ---------- */
+  .steps{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:20px;
+  }
+  .step{
+    padding:32px 28px;
+    position:relative;
+    background:var(--white-paper);
+    border:1px solid var(--line);
+    border-radius:14px;
+  }
+  .step .tick{ display:none; }
+  .step .mm{
+    display:inline-flex;
+    align-items:center; justify-content:center;
+    width:38px; height:38px;
+    border-radius:50%;
+    background:var(--metallic);
+    color:#fff;
+    font-family:var(--font-mono);
+    font-size:15px;
+    font-weight:600;
+    margin-bottom:16px;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.15);
+  }
+  .step h3{ margin-bottom:10px; }
+  .step p{ color:var(--ink-soft); font-size:.95rem; }
+
+  @media (max-width:820px){
+    .steps{ grid-template-columns:1fr; }
+    .step:last-child{ border-bottom:none; }
+  }
+
+  /* ---------- Wat krijg je ---------- */
+  .deliver-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:2px;
+    background:var(--line);
+    border:1px solid var(--line);
+  }
+  .deliver-item{
+    background:var(--paper);
+    padding:26px 24px;
+    display:flex; gap:14px;
+    align-items:flex-start;
+  }
+  .deliver-item .check{
+    flex:none;
+    width:22px; height:22px;
+    border-radius:50%;
+    background:var(--check);
+    color:var(--white-paper);
+    display:flex; align-items:center; justify-content:center;
+    font-size:13px; font-weight:700;
+    margin-top:2px;
+  }
+  .deliver-item p{ font-size:.95rem; color:var(--ink-soft); }
+  .deliver-item strong{ color:var(--ink); display:block; margin-bottom:3px; font-family:var(--font-display); font-size:1rem; }
+
+  @media (max-width:820px){ .deliver-grid{ grid-template-columns:1fr; } }
+
+  /* ---------- Voor welke verbouwingen ---------- */
+  .tag-cloud{ display:flex; flex-wrap:wrap; gap:10px; margin-top:28px; }
+  .tag{
+    font-family:var(--font-mono);
+    font-size:13px;
+    padding:9px 16px;
+    border:1px solid var(--line);
+    border-radius:20px;
+    background:var(--white-paper);
+    color:var(--ink-soft);
+  }
+
+  /* ---------- Vertrouwen ---------- */
+  .trust{
+    display:grid;
+    grid-template-columns:0.9fr 1.1fr;
+    gap:56px;
+    align-items:center;
+  }
+  .trust-mark{
+    font-family:var(--font-mono);
+    font-size:13px;
+    color:var(--blueprint);
+    border:1.5px solid var(--blueprint);
+    border-radius:50%;
+    width:168px; height:168px;
+    display:flex; align-items:center; justify-content:center;
+    text-align:center;
+    line-height:1.4;
+    padding:20px;
+    margin:0 auto;
+    background:var(--white-paper);
+  }
+  @media (max-width:820px){ .trust{ grid-template-columns:1fr; } .trust-mark{ order:-1; } }
+
+  /* ---------- Pakketten ---------- */
+  .pricing-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:24px;
+  }
+  .price-card{
+    background:var(--white-paper);
+    border:1px solid var(--line);
+    border-radius:16px;
+    padding:32px 28px;
+    display:flex; flex-direction:column;
+    position:relative;
+    box-shadow:0 1px 3px rgba(20,30,40,.04);
+  }
+  .price-card.featured{
+    border-color:var(--blueprint);
+    box-shadow:0 20px 40px -18px rgba(31,58,86,.35);
+  }
+  .price-card.featured::before{
+    content:"MEEST GEKOZEN";
+    position:absolute; top:-12px; left:28px;
+    background:var(--blueprint);
+    color:var(--white-paper);
+    font-family:var(--font-mono);
+    font-size:10px;
+    letter-spacing:.08em;
+    padding:4px 10px;
+    border-radius:20px;
+  }
+  .price-card h3{ font-size:1.3rem; margin-bottom:6px; }
+  .price-card .tagline{ color:var(--ink-soft); font-size:.88rem; margin-bottom:18px; min-height:40px; }
+  .price-card .price{
+    font-family:var(--font-mono);
+    font-size:2.1rem;
+    font-weight:600;
+    margin-bottom:6px;
+  }
+  .price-card .price small{ font-size:.85rem; font-weight:400; color:var(--ink-faint); }
+  .price-card .desc{ color:var(--ink-soft); font-size:.92rem; margin-bottom:20px; }
+  .price-card ul{ list-style:none; display:flex; flex-direction:column; gap:9px; margin-bottom:26px; flex:1; }
+  .price-card li{ font-size:.9rem; color:var(--ink-soft); display:flex; gap:9px; }
+  .price-card li::before{ content:"✓"; color:var(--check); font-weight:700; flex:none; }
+  .price-card .btn{ justify-content:center; width:100%; }
+
+  @media (max-width:900px){ .pricing-grid{ grid-template-columns:1fr; } }
+
+  /* ---------- Upload form ---------- */
+  .form-shell{
+    background:var(--white-paper);
+    border:1px solid var(--line);
+    padding:44px;
+    max-width:720px;
+    margin:0 auto;
+  }
+  .form-shell .stamp-label{ margin-bottom:8px; }
+  .form-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:18px;
+    margin-top:26px;
+  }
+  .field{ display:flex; flex-direction:column; gap:6px; }
+  .field.full{ grid-column:1 / -1; }
+  .field label{ font-size:.82rem; font-weight:600; color:var(--ink-soft); }
+  .field input, .field select, .field textarea{
+    font-family:var(--font-body);
+    font-size:.95rem;
+    padding:11px 13px;
+    border:1.5px solid var(--line);
+    background:var(--paper);
+    border-radius:var(--radius);
+    color:var(--ink);
+  }
+  .field input:focus, .field select:focus, .field textarea:focus{ border-color:var(--blueprint); }
+  .field textarea{ resize:vertical; min-height:78px; }
+  .upload-slot{
+    border:1.5px dashed var(--line);
+    border-radius:var(--radius);
+    padding:16px;
+    font-size:.88rem;
+    color:var(--ink-faint);
+    text-align:center;
+    font-family:var(--font-mono);
+  }
+  .consent{ display:flex; align-items:flex-start; gap:10px; font-size:.85rem; color:var(--ink-soft); }
+  .consent input{ margin-top:3px; }
+  .form-shell .btn{ margin-top:26px; width:100%; justify-content:center; }
+
+  @media (max-width:640px){ .form-grid{ grid-template-columns:1fr; } .form-shell{ padding:28px 22px; } }
+
+  /* ---------- Disclaimer & footer ---------- */
+  .disclaimer{
+    max-width:760px;
+    margin:0 auto;
+    text-align:center;
+    color:var(--ink-faint);
+    font-size:.84rem;
+    line-height:1.7;
+  }
+  footer{
+    border-top:1px solid var(--line);
+    padding:40px 0;
+  }
+  .footer-row{
+    display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px;
+    font-size:.85rem; color:var(--ink-faint);
+  }
+
+  /* fade-in on scroll */
+  .reveal{ opacity:0; transform:translateY(16px); transition:opacity .6s ease, transform .6s ease; }
+  .reveal.in{ opacity:1; transform:none; }
+  @media (prefers-reduced-motion: reduce){
+    .reveal{ opacity:1; transform:none; transition:none; }
+    html{ scroll-behavior:auto; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <nav>
+    <div class="logo"><span class="mark">✓</span> DE VERBOUW OFFERTE CHECK</div>
+    <ul class="nav-links">
+      <li><a href="#hoe-werkt-het">Hoe het werkt</a></li>
+      <li><a href="#pakketten">Pakketten</a></li>
+      <li><a href="#vertrouwen">Over ons</a></li>
+    </ul>
+    <div class="nav-cta"><a href="#upload" class="btn btn-primary" style="padding:10px 18px; font-size:.88rem;">Laat mijn offerte checken</a></div>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <span class="eyebrow">Voor je tekent</span>
+      <h1>De Verbouw<br>Offerte Check</h1>
+      <p class="lede">Upload je verbouwingsofferte(s) en ontdek welke keuze het duidelijkst, compleetst en minst risicovol is — voordat je tekent.</p>
+      <div class="hero-actions">
+        <a href="#upload" class="btn btn-primary">Laat mijn offerte checken</a>
+        <a href="#pakketten" class="btn btn-ghost">Bekijk pakketten</a>
+      </div>
+      <p class="hero-intro">Een verbouwing aan een bestaande woning kost vaak duizenden euro's. Toch zijn offertes regelmatig onduidelijk, incompleet of lastig te vergelijken. De Verbouw Offerte Check helpt je om rode vlaggen, ontbrekende kostenposten en belangrijke vragen vooraf te ontdekken.</p>
+    </div>
+
+    <div class="doc-stage">
+      <div class="doc">
+        <div class="doc-head">
+          <span class="doc-title">Offerte — Verbouwing</span>
+          <span class="doc-badge">Gecontroleerd</span>
+        </div>
+        <div class="doc-row"><span>Sloopwerk badkamer</span><span class="amt">€ 840,-</span></div>
+        <div class="doc-row"><span>Leidingwerk verplaatsen</span><span class="amt">€ 1.260,-</span></div>
+        <div class="doc-row flagged"><span>Afvoer bouwafval</span><span class="amt">ontbreekt</span></div>
+        <div class="doc-row"><span>Tegelwerk &amp; afwerking</span><span class="amt">€ 2.980,-</span></div>
+        <div class="doc-row"><span>Garantie &amp; meerwerk</span><span class="amt">n.t.b.</span></div>
+        <div class="doc-total"><span>Totaal excl. btw</span><span class="amt">€ 5.080,-</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section-alt">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">Het probleem</span>
+      <h2>Offertes vergelijken is lastig</h2>
+    </div>
+    <div class="problem-grid">
+      <p class="lede reveal" style="max-width:44ch;">De goedkoopste offerte is niet altijd de beste keuze. Soms ontbreken er posten zoals sloopwerk, afvalafvoer, herstelwerk, afwerking, elektra, planning, garantie of duidelijke afspraken over meerwerk.<br><br>Met De Verbouw Offerte Check krijg je inzicht voordat je akkoord geeft.</p>
+      <ul class="checklist reveal">
+        <li><span class="x">✕</span> Sloopwerk niet gespecificeerd</li>
+        <li><span class="x">✕</span> Afvalafvoer ontbreekt</li>
+        <li><span class="x">✕</span> Geen afspraken over meerwerk</li>
+        <li><span class="x">✕</span> Planning en garantie onduidelijk</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="hoe-werkt-het">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">De werkwijze</span>
+      <h2>Hoe werkt het?</h2>
+    </div>
+    <div class="steps reveal">
+      <div class="step">
+        <div class="tick">STAP — 01</div>
+        <span class="mm">01</span>
+        <h3>Upload je offerte(s)</h3>
+        <p>Lever 1 tot 3 offertes aan als PDF, scan of foto.</p>
+      </div>
+      <div class="step">
+        <div class="tick">STAP — 02</div>
+        <span class="mm">02</span>
+        <h3>Wij analyseren duidelijkheid en risico's</h3>
+        <p>De offerte(s) worden beoordeeld op volledigheid, werkzaamheden, materialen, stelposten, meerwerk, planning, betaling, garantie en risico's bij bestaande woningen.</p>
+      </div>
+      <div class="step">
+        <div class="tick">STAP — 03</div>
+        <span class="mm">03</span>
+        <h3>Ontvang een helder rapport</h3>
+        <p>Je krijgt een overzicht met score per offerte, rode vlaggen, ontbrekende posten, vragen voor de aannemer en een praktisch eindadvies.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section-alt">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">De inhoud</span>
+      <h2>Wat krijg je?</h2>
+    </div>
+    <div class="deliver-grid reveal">
+      <div class="deliver-item"><span class="check">✓</span><p><strong>Volledige analyse</strong>Analyse van 1 tot 3 offertes.</p></div>
+      <div class="deliver-item"><span class="check">✓</span><p><strong>Vergelijking</strong>Vergelijking van prijs en inhoud.</p></div>
+      <div class="deliver-item"><span class="check">✓</span><p><strong>Rode vlaggen</strong>Per offerte helder in beeld.</p></div>
+      <div class="deliver-item"><span class="check">✓</span><p><strong>Ontbrekende posten</strong>Onduidelijke of missende regels.</p></div>
+      <div class="deliver-item"><span class="check">✓</span><p><strong>Vragen voor de aannemer</strong>Concreet en direct te stellen.</p></div>
+      <div class="deliver-item"><span class="check">✓</span><p><strong>Eindadvies</strong>Tekenen, doorvragen of extra offerte aanvragen.</p></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">Toepassingen</span>
+      <h2>Voor welke verbouwingen?</h2>
+      <p class="lede" style="margin-top:14px;">Geschikt voor offertes voor verbouwingen in en aan bestaande woningen.</p>
+    </div>
+    <div class="tag-cloud reveal">
+      <span class="tag">Badkamer</span>
+      <span class="tag">Keuken</span>
+      <span class="tag">Aanbouw</span>
+      <span class="tag">Uitbouw</span>
+      <span class="tag">Zolder</span>
+      <span class="tag">Dakopbouw</span>
+      <span class="tag">Renovatie</span>
+      <span class="tag">Kozijnen</span>
+      <span class="tag">Isolatie</span>
+      <span class="tag">Indeling wijzigen</span>
+      <span class="tag">Elektra &amp; leidingwerk</span>
+    </div>
+  </div>
+</section>
+
+<section id="vertrouwen" class="section-alt">
+  <div class="wrap trust">
+    <div class="trust-mark reveal">15+ jaar<br>praktijkervaring<br>in de bouw</div>
+    <div class="reveal">
+      <span class="eyebrow">Vertrouwen</span>
+      <h2 style="margin-top:14px;">Ontwikkeld vanuit praktijkervaring in de bouw</h2>
+      <p class="lede" style="margin-top:16px; max-width:52ch;">Deze check is gemaakt voor particulieren die geen zin hebben in bouwjargon, vage posten of verrassingen achteraf. Je krijgt een praktische analyse in gewone taal.</p>
+    </div>
+  </div>
+</section>
+
+<section id="pakketten">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">Pakketten</span>
+      <h2>Kies je offertecheck</h2>
+    </div>
+    <div class="pricing-grid reveal">
+      <div class="price-card">
+        <h3>Basis</h3>
+        <div class="tagline">1 offerte checken</div>
+        <div class="price">€ 39</div>
+        <p class="desc">Voor wie 1 offerte heeft ontvangen en wil weten of deze duidelijk en compleet genoeg is.</p>
+        <ul>
+          <li>Analyse van 1 offerte</li>
+          <li>Score op duidelijkheid en volledigheid</li>
+          <li>Rode vlaggen</li>
+          <li>Ontbrekende of onduidelijke posten</li>
+          <li>Vragen voor de aannemer</li>
+          <li>Praktisch eindadvies</li>
+        </ul>
+        <a href="#upload" class="btn btn-ghost">Start Basis-check</a>
+      </div>
+
+      <div class="price-card featured">
+        <h3>Vergelijk</h3>
+        <div class="tagline">2 of 3 offertes vergelijken</div>
+        <div class="price">€ 69</div>
+        <p class="desc">Voor wie meerdere offertes heeft ontvangen en wil weten welke optie de beste verhouding biedt tussen prijs, inhoud en risico.</p>
+        <ul>
+          <li>Analyse van 2 of 3 offertes</li>
+          <li>Score per offerte</li>
+          <li>Vergelijking van prijs en inhoud</li>
+          <li>Voorkeursoptie met onderbouwing</li>
+          <li>Rode vlaggen per offerte</li>
+          <li>Vragen per aannemer</li>
+          <li>Praktisch eindadvies</li>
+        </ul>
+        <a href="#upload" class="btn btn-primary">Start Vergelijk-check</a>
+      </div>
+
+      <div class="price-card">
+        <h3>Expert</h3>
+        <div class="tagline">Persoonlijke review</div>
+        <div class="price">€ 179</div>
+        <p class="desc">Voor wie extra zekerheid wil en een persoonlijke vakblik op de offerte(s).</p>
+        <ul>
+          <li>Alles uit de Vergelijk-check</li>
+          <li>Persoonlijke review door een ervaren aannemer</li>
+          <li>Extra toelichting op belangrijkste risico's</li>
+          <li>Optioneel korte telefonische toelichting</li>
+        </ul>
+        <a href="#upload" class="btn btn-ghost">Start Expert-check</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section-alt" id="upload">
+  <div class="wrap">
+    <div class="section-head reveal" style="margin:0 auto 40px; text-align:center; max-width:600px;">
+      <span class="eyebrow" style="justify-content:center;">Aanvraag</span>
+      <h2>Upload je offerte(s)</h2>
+      <p class="lede" style="margin:14px auto 0;">Vul hieronder je gegevens in en upload je offerte(s). Hoe duidelijker je omschrijving, hoe beter de analyse.</p>
+    </div>
+
+    <form class="form-shell reveal" onsubmit="return false;">
+      <span class="stamp-label">Jouw gegevens</span>
+      <div class="form-grid">
+        <div class="field"><label for="naam">Naam</label><input id="naam" type="text" placeholder="Voor- en achternaam"></div>
+        <div class="field"><label for="email">E-mailadres</label><input id="email" type="email" placeholder="naam@voorbeeld.nl"></div>
+        <div class="field"><label for="telefoon">Telefoonnummer (optioneel)</label><input id="telefoon" type="tel" placeholder="06 - 12345678"></div>
+        <div class="field"><label for="type">Type verbouwing</label><input id="type" type="text" placeholder="Bijv. badkamer, aanbouw"></div>
+        <div class="field"><label for="regio">Plaats/regio</label><input id="regio" type="text" placeholder="Bijv. Utrecht"></div>
+        <div class="field"><label for="aantal">Aantal offertes</label>
+          <select id="aantal">
+            <option>1 offerte</option>
+            <option>2 offertes</option>
+            <option>3 offertes</option>
+          </select>
+        </div>
+        <div class="field full"><label for="omschrijving">Korte omschrijving van de verbouwing</label><textarea id="omschrijving" placeholder="Wat gaat er precies gebeuren?"></textarea></div>
+        <div class="field full"><label for="twijfel">Wat is je grootste twijfel?</label><textarea id="twijfel" placeholder="Bijv. is de prijs reëel, mis ik iets, wie is betrouwbaar"></textarea></div>
+        <div class="field"><label for="start">Wanneer wil je starten?</label><input id="start" type="text" placeholder="Bijv. over 2 maanden"></div>
+        <div class="field"><label>&nbsp;</label><div class="upload-slot">Offerte 1 — sleep bestand hierheen</div></div>
+        <div class="field"><label>&nbsp;</label><div class="upload-slot">Offerte 2 (optioneel)</div></div>
+        <div class="field"><label>&nbsp;</label><div class="upload-slot">Offerte 3 (optioneel)</div></div>
+      </div>
+      <label class="consent" style="margin-top:22px;">
+        <input type="checkbox">
+        <span>Ik ga akkoord met de voorwaarden en privacyverklaring.</span>
+      </label>
+      <button type="submit" class="btn btn-primary">Verstuur mijn offerte(s)</button>
+    </form>
+  </div>
+</section>
+
+<section>
+  <div class="wrap disclaimer reveal">
+    <p><strong style="color:var(--ink-soft);">Disclaimer.</strong> De Verbouw Offerte Check geeft een praktische analyse van aangeleverde offertes op duidelijkheid, volledigheid en mogelijke risico's. Het rapport is geen bouwkundige keuring, juridisch advies of garantie op de uiteindelijke uitvoering.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap footer-row">
+    <div class="logo" style="font-size:13px;"><span class="mark" style="width:20px;height:20px;font-size:11px;">✓</span> De Verbouw Offerte Check</div>
+    <div>© 2026 — Duidelijkheid voordat je tekent.</div>
+  </div>
+</footer>
+
+<script>
+  // Mobiele nav (eenvoudige toggle-placeholder, kan later uitgebreid worden)
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+    });
+  }, { threshold:0.15 });
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+</script>
+
+</body>
+</html>
